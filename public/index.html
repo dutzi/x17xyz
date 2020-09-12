@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>x17xyz</title>
+
+    <!-- update the version number as needed -->
+    <!-- <script defer src="/__/firebase/7.20.0/firebase-app.js"></script> -->
+    <!-- include only the Firebase features as you need -->
+    <!-- <script defer src="/__/firebase/7.20.0/firebase-auth.js"></script> -->
+    <!-- <script defer src="/__/firebase/7.20.0/firebase-database.js"></script> -->
+    <!-- <script defer src="/__/firebase/7.20.0/firebase-messaging.js"></script> -->
+    <!-- <script defer src="/__/firebase/7.20.0/firebase-storage.js"></script> -->
+    <!-- initialize the SDK after all desired features are loaded -->
+    <!-- <script defer src="/__/firebase/init.js"></script> -->
+
+    <style media="screen">
+      body {
+        background: #eceff1;
+        color: rgba(0, 0, 0, 0.87);
+        font-family: Roboto, Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      textarea {
+        width: 70vw;
+        max-height: 300px;
+        max-width: 740px;
+        height: calc(100vh - 8em);
+        margin-top: 4em;
+        border: 2px solid #000;
+        padding: 1em;
+        outline: none;
+      }
+      textarea:focus {
+        box-shadow: 0px 10px 19px -4px #00000052;
+      }
+      textarea[disabled] {
+        border: 2px solid #0005;
+        color: #000;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .margin-h {
+        margin-bottom: 1em;
+      }
+      .submitBtn {
+        border: 2px solid #000;
+        background: none;
+        color: #000;
+        font-family: inherit;
+        font-size: 1.5em;
+        padding: 0.4em 1.4em;
+        cursor: pointer;
+      }
+      .submitBtn[disabled] {
+        cursor: default;
+        border: 2px solid #0005;
+        color: #0005;
+      }
+      .linkPreview {
+        display: none;
+      }
+      .link {
+        width: 70vw;
+        margin-top: 4em;
+        border: 2px solid #000;
+        padding: 1em;
+        outline: none;
+        font-size: 1em;
+      }
+      .link:focus {
+        box-shadow: 0px 10px 19px -4px #00000052;
+      }
+
+      ::selection {
+        background-color: #000000cc;
+        color: white;
+      }
+      @media (max-width: 600px) {
+        body,
+        #message {
+          margin-top: 0;
+          background: white;
+          box-shadow: none;
+        }
+        body {
+          border-top: 16px solid #ffa100;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <div id="message">
+      <h2>Welcome</h2>
+      <h1>Firebase Hosting Setup Complete</h1>
+      <p>
+        You're seeing this because you've successfully setup Firebase Hosting.
+        Now it's time to go build something extraordinary!
+      </p>
+      <a target="_blank" href="https://firebase.google.com/docs/hosting/"
+        >Open Hosting Documentation</a
+      >
+    </div>
+    <p id="load">Firebase SDK Loading&hellip;</p>
+ -->
+    <form
+      id="form"
+      onsubmit="handleSubmit(event )"
+      action="/submit"
+      method="post"
+    >
+      <textarea
+        name="message"
+        placeholder="Type in a secret message..."
+      ></textarea>
+      <div class="margin-h"></div>
+      <input class="submitBtn" type="submit" value="Submit" />
+    </form>
+    <div class="linkPreview">
+      <div class="margin-h"></div>
+      <input type="text" class="link" />
+    </div>
+    <p></p>
+    <script>
+      const isDev = location.hostname === 'localhost';
+
+      const revealedMessageId = isDev
+        ? location.hash.substr(1)
+        : location.pathname.substr(1);
+
+      if (revealedMessageId !== '') {
+        const url = isDev
+          ? 'http://localhost:5001/x17xyz/us-central1/y'
+          : 'https://xxxxxxxxxxxxxxxxx.xyz/y';
+
+        const textarea = document.querySelector('textarea');
+        textarea.setAttribute('disabled', 'true');
+        textarea.setAttribute('disabled', 'true');
+        textarea.style.resize = 'none';
+        textarea.placeholder = 'Loading message...';
+        document.querySelector('.submitBtn').style.display = 'none';
+
+        fetch(url + '?z=' + revealedMessageId)
+          .then((res) => res.json())
+          .then((res) => {
+            const message = res.xyz || 'Message not found...';
+            document.querySelector('textarea').value = message;
+          });
+      }
+
+      function handleSubmit(e) {
+        if (e) {
+          e.preventDefault();
+        }
+        const url = isDev
+          ? 'http://localhost:5001/x17xyz/us-central1/x'
+          : 'https://xxxxxxxxxxxxxxxxx.xyz/x';
+
+        const message = document.querySelector('textarea').value;
+
+        document.querySelector('.submitBtn').value = 'Submitting...';
+        document.querySelector('.submitBtn').setAttribute('disabled', 'true');
+        fetch(url, { method: 'post', body: `message=${message}` })
+          .then((res) => res.json())
+          .then((res) => {
+            document.querySelector('#form').style.display = 'none';
+            document.querySelector('.linkPreview').style.display = 'block';
+
+            const link = document.querySelector('.link');
+
+            link.value = `https://${location.host}/${res.id}`;
+            link.focus();
+
+            link.setSelectionRange(0, link.value.length);
+          });
+        // document.querySelector('#form').submit();
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const textarea = document.querySelector('textarea');
+
+        textarea.addEventListener('keydown', function (e) {
+          if (e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
+            handleSubmit();
+          }
+        });
+
+        textarea.focus();
+      });
+    </script>
+  </body>
+</html>
