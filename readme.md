@@ -3,7 +3,7 @@
 ## Develop
 
 ```
-serve -p 5050
+yarn start
 ```
 
 ## Deploy

@@ -1,0 +1,29 @@
+{
+  "name": "x17xyz",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "multiplerun start",
+    "deploy": "firebase deploy"
+  },
+  "multiplerun": {
+    "start": [
+      [
+        "npx iterm2-tab-set --title App && serve -p 5050 ./public",
+        "npx iterm2-tab-set --title Shell"
+      ],
+      [
+        "cd functions && npx iterm2-tab-set --title Functions && nvm use 8 && npm run watch",
+        "npx iterm2-tab-set --title Emulators && firebase emulators:start"
+      ]
+    ]
+  },
+  "repository": "git@github.com:dutzi/x17xyz.git",
+  "author": "dutzi <dutzi.b@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "iterm2-tab-set": "^0.7.1",
+    "multiplerun-same-tab": "^1.1.3",
+    "serve": "^11.3.2"
+  }
+}

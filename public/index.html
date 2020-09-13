@@ -4,17 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>x17xyz</title>
-
-    <!-- update the version number as needed -->
-    <!-- <script defer src="/__/firebase/7.20.0/firebase-app.js"></script> -->
-    <!-- include only the Firebase features as you need -->
-    <!-- <script defer src="/__/firebase/7.20.0/firebase-auth.js"></script> -->
-    <!-- <script defer src="/__/firebase/7.20.0/firebase-database.js"></script> -->
-    <!-- <script defer src="/__/firebase/7.20.0/firebase-messaging.js"></script> -->
-    <!-- <script defer src="/__/firebase/7.20.0/firebase-storage.js"></script> -->
-    <!-- initialize the SDK after all desired features are loaded -->
-    <!-- <script defer src="/__/firebase/init.js"></script> -->
-
     <style media="screen">
       body {
         background: #eceff1;
@@ -25,16 +14,27 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: space-between;
+        height: 100vh;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      a {
+        color: #000;
+      }
+      .textareaWrapper {
+        margin-top: 4em;
       }
       textarea {
         width: 70vw;
         max-height: 300px;
         max-width: 740px;
         height: calc(100vh - 8em);
-        margin-top: 4em;
         border: 2px solid #000;
         padding: 1em;
         outline: none;
+        margin-bottom: 1em;
       }
       textarea:focus {
         box-shadow: 0px 10px 19px -4px #00000052;
@@ -46,10 +46,13 @@
       form {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-end;
       }
       .margin-h {
         margin-bottom: 1em;
+      }
+      .margin-v {
+        margin-right: 1em;
       }
       .submitBtn {
         border: 2px solid #000;
@@ -60,6 +63,24 @@
         padding: 0.4em 1.4em;
         cursor: pointer;
       }
+      .gutter {
+        display: flex;
+        margin-bottom: 1em;
+      }
+      .settingsBtn {
+        background: none;
+        color: #888;
+        border: none;
+        font-size: 1.5em;
+        padding: 0.4em 0.5em;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+      .settingsBtn img {
+        width: 26px;
+        height: 26px;
+      }
       .submitBtn[disabled] {
         cursor: default;
         border: 2px solid #0005;
@@ -67,10 +88,15 @@
       }
       .linkPreview {
         display: none;
+        margin-bottom: 1em;
+      }
+      .linkWrapper {
+        position: relative;
+        margin-top: 4em;
       }
       .link {
+        max-width: 740px;
         width: 70vw;
-        margin-top: 4em;
         border: 2px solid #000;
         padding: 1em;
         outline: none;
@@ -79,56 +105,115 @@
       .link:focus {
         box-shadow: 0px 10px 19px -4px #00000052;
       }
-
+      .createNewLink {
+        display: none;
+      }
+      .copyButton {
+        position: absolute;
+        right: 0px;
+        height: calc(100% - 1em);
+        background: none;
+        border: none;
+        font-family: inherit;
+        font-size: 1em;
+        padding: 0.5em 1em;
+        cursor: pointer;
+        margin: 0.5em;
+      }
+      body.reveal .submitBtn {
+        display: none;
+      }
+      body.reveal textarea {
+        resize: none;
+      }
+      body:not(.create) .gutter {
+        display: none;
+      }
+      body:not(.create) .createNewLink {
+        display: inline;
+      }
       ::selection {
         background-color: #000000cc;
         color: white;
       }
-      @media (max-width: 600px) {
-        body,
-        #message {
-          margin-top: 0;
-          background: white;
-          box-shadow: none;
-        }
-        body {
-          border-top: 16px solid #ffa100;
-        }
+      .settings {
+        align-self: flex-start;
+        display: none;
+      }
+      .dueDate {
+        margin-left: 1.5em;
+        padding: 0.7em;
+        border: 2px solid #000;
+      }
+      .footer {
+        text-align: center;
+        padding: 0.75em;
+        color: #888;
+      }
+      .footer a {
+        text-decoration: none;
+      }
+      .github {
+        opacity: 0.3;
+        width: 40px;
+        margin-top: 1em;
+        margin-bottom: 1em;
       }
     </style>
   </head>
-  <body>
-    <!-- <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>
-        You're seeing this because you've successfully setup Firebase Hosting.
-        Now it's time to go build something extraordinary!
-      </p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/"
-        >Open Hosting Documentation</a
+  <body class="create">
+    <main>
+      <form
+        id="form"
+        onsubmit="handleSubmit(event)"
+        action="/submit"
+        method="post"
       >
-    </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
- -->
-    <form
-      id="form"
-      onsubmit="handleSubmit(event )"
-      action="/submit"
-      method="post"
-    >
-      <textarea
-        name="message"
-        placeholder="Type in a secret message..."
-      ></textarea>
-      <div class="margin-h"></div>
-      <input class="submitBtn" type="submit" value="Submit" />
-    </form>
-    <div class="linkPreview">
-      <div class="margin-h"></div>
-      <input type="text" class="link" />
-    </div>
-    <p></p>
+        <div class="textareaWrapper">
+          <textarea
+            data-gramm_editor="false"
+            name="message"
+            placeholder="Type in a secret message..."
+          ></textarea>
+        </div>
+        <div class="gutter">
+          <button class="settingsBtn" type="button" onclick="showSettings()">
+            <img src="/cog.svg" />
+          </button>
+          <div class="margin-v"></div>
+          <input class="submitBtn" type="submit" value="Submit" />
+        </div>
+        <div class="settings">
+          <div>
+            <input
+              type="checkbox"
+              id="setDueDate"
+              class="setDueDate"
+              name="setDueDate"
+              onchange="handleDueDateCheckChange(event)"
+            />
+            <label for="setDueDate"
+              >Set due date, afterwhich this message will be deleted</label
+            >
+          </div>
+          <div class="margin-h"></div>
+          <input class="dueDate" type="date" name="dueDate" disabled />
+        </div>
+      </form>
+      <div class="linkPreview">
+        <div class="linkWrapper">
+          <input data-gramm_editor="false" type="text" class="link" />
+          <button class="copyButton" onclick="copyLink()">Copy</button>
+        </div>
+      </div>
+      <a class="createNewLink" href="/">Create New Secret Link</a>
+    </main>
+    <footer class="footer">
+      <div>a side project by <a href="https://dutzi.party">dutzi</a></div>
+      <a href="https://github.com/dutzi/x17xyz">
+        <img class="github" alt="GitHub" src="/github.svg" />
+      </a>
+    </footer>
     <script>
       const isDev = location.hostname === 'localhost';
 
@@ -141,12 +226,12 @@
           ? 'http://localhost:5001/x17xyz/us-central1/y'
           : 'https://xxxxxxxxxxxxxxxxx.xyz/y';
 
+        document.body.classList.add('reveal');
+        document.body.classList.remove('create');
+
         const textarea = document.querySelector('textarea');
         textarea.setAttribute('disabled', 'true');
-        textarea.setAttribute('disabled', 'true');
-        textarea.style.resize = 'none';
         textarea.placeholder = 'Loading message...';
-        document.querySelector('.submitBtn').style.display = 'none';
 
         fetch(url + '?z=' + revealedMessageId)
           .then((res) => res.json())
@@ -154,6 +239,19 @@
             const message = res.xyz || 'Message not found...';
             document.querySelector('textarea').value = message;
           });
+      }
+
+      function showSettings() {
+        document.querySelector('.settingsBtn').style.display = 'none';
+        document.querySelector('.settings').style.display = 'block';
+      }
+
+      function handleDueDateCheckChange(e) {
+        if (e.currentTarget.checked) {
+          document.querySelector('.dueDate').removeAttribute('disabled');
+        } else {
+          document.querySelector('.dueDate').setAttribute('disabled', 'true');
+        }
       }
 
       function handleSubmit(e) {
@@ -165,27 +263,64 @@
           : 'https://xxxxxxxxxxxxxxxxx.xyz/x';
 
         const message = document.querySelector('textarea').value;
+        const isWithDueDate = document.querySelector('.setDueDate').checked;
+        const dueDate = document.querySelector('.dueDate').value;
 
         document.querySelector('.submitBtn').value = 'Submitting...';
         document.querySelector('.submitBtn').setAttribute('disabled', 'true');
-        fetch(url, { method: 'post', body: `message=${message}` })
+        fetch(url, {
+          method: 'post',
+          body: JSON.stringify({ message, dueDate, isWithDueDate }),
+        })
           .then((res) => res.json())
           .then((res) => {
+            document.body.classList.remove('create');
             document.querySelector('#form').style.display = 'none';
             document.querySelector('.linkPreview').style.display = 'block';
 
             const link = document.querySelector('.link');
 
-            link.value = `https://${location.host}/${res.id}`;
+            const hash = isDev ? '#' : '';
+
+            link.value = `${location.protocol}//${location.host}/${hash}${res.id}`;
             link.focus();
 
             link.setSelectionRange(0, link.value.length);
+
+            if (autoCopy) {
+              copyLink();
+            }
           });
         // document.querySelector('#form').submit();
       }
 
+      function copyLink() {
+        var mystring = document.querySelector('.link').value;
+        var myblob = new Blob([mystring], {
+          type: 'text/plain',
+        });
+
+        let data = [new ClipboardItem({ 'text/plain': myblob })];
+
+        navigator.clipboard.write(data);
+      }
+
       document.addEventListener('DOMContentLoaded', function () {
         const textarea = document.querySelector('textarea');
+        const date = document.querySelector('.dueDate');
+
+        const today = new Date().toISOString().substr(0, 10);
+        const tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+          .toISOString()
+          .substr(0, 10);
+        const nextWeek = new Date(
+          new Date().getTime() + 7 * 24 * 60 * 60 * 1000
+        )
+          .toISOString()
+          .substr(0, 10);
+        date.value = tomorrow;
+        date.min = today;
+        date.max = nextWeek;
 
         textarea.addEventListener('keydown', function (e) {
           if (e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
