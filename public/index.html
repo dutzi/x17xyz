@@ -222,9 +222,7 @@
         : location.pathname.substr(1);
 
       if (revealedMessageId !== '') {
-        const url = isDev
-          ? 'http://localhost:5001/x17xyz/us-central1/y'
-          : 'https://xxxxxxxxxxxxxxxxx.xyz/y';
+        const url = isDev ? 'http://localhost:5001/x17xyz/us-central1/y' : '/y';
 
         document.body.classList.add('reveal');
         document.body.classList.remove('create');
@@ -258,9 +256,7 @@
         if (e) {
           e.preventDefault();
         }
-        const url = isDev
-          ? 'http://localhost:5001/x17xyz/us-central1/x'
-          : 'https://xxxxxxxxxxxxxxxxx.xyz/x';
+        const url = isDev ? 'http://localhost:5001/x17xyz/us-central1/x' : '/x';
 
         const message = document.querySelector('textarea').value;
         const isWithDueDate = document.querySelector('.setDueDate').checked;
